@@ -14,7 +14,15 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>PWN GenAI MVP</h3>
+                        <img
+                            src={"/PWN logo.svg"}
+                            alt="PWN GenAI MVP logo"
+                            aria-label="PWN GenAI MVP logo"
+                            width="80px"
+                            height="80px"
+                            className={styles.headerLogo}
+                        />
+                        <h3 className={styles.headerTitle}>GenerativeAI MVP</h3>
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
