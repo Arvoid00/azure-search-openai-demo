@@ -15,7 +15,7 @@ const Layout = () => {
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
                         <img
-                            src={"/PWN logo.svg"}
+                            src={"/PWN-logo.svg"}
                             alt="PWN GenAI MVP logo"
                             aria-label="PWN GenAI MVP logo"
                             width="80px"
