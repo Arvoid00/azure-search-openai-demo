@@ -31,7 +31,6 @@ var actualSearchServiceSemanticRankerLevel = (searchServiceSkuName == 'free') ? 
 param useSearchServiceKey bool = searchServiceSkuName == 'free'
 
 param storageAccountName string = ''
-param keyVaultResourceGroupName string = ''
 param storageResourceGroupName string = ''
 param storageResourceGroupLocation string = location
 param storageContainerName string = 'content'
@@ -47,8 +46,8 @@ param openAiServiceName string = ''
 param openAiResourceGroupName string = ''
 param useGPT4V bool = false
 
+param keyVaultResourceGroupName string = ''
 param keyVaultServiceName string = ''
-param computerVisionSecretName string = 'computerVisionSecret'
 param searchServiceSecretName string = 'searchServiceSecret'
 
 @description('Location for the OpenAI resource group')
@@ -130,7 +129,7 @@ var resourceToken = toLower(uniqueString(subscription().id, environmentName, loc
 var tags = { 'azd-env-name': environmentName }
 var computerVisionName = !empty(computerVisionServiceName) ? computerVisionServiceName : '${abbrs.cognitiveServicesComputerVision}${resourceToken}'
 
-var useKeyVault = useGPT4V || useSearchServiceKey
+var useKeyVault = useSearchServiceKey
 var tenantIdForAuth = !empty(authTenantId) ? authTenantId : tenantId
 var authenticationIssuerUri = '${environment().authentication.loginEndpoint}${tenantIdForAuth}/v2.0'
 
@@ -237,7 +236,6 @@ module backend 'core/host/appservice.bicep' = {
       AZURE_SEARCH_SERVICE: searchService.outputs.name
       AZURE_SEARCH_SEMANTIC_RANKER: actualSearchServiceSemanticRankerLevel
       AZURE_VISION_ENDPOINT: useGPT4V ? computerVision.outputs.endpoint : ''
-      VISION_SECRET_NAME: useGPT4V ? computerVisionSecretName : ''
       SEARCH_SECRET_NAME: useSearchServiceKey ? searchServiceSecretName : ''
       AZURE_KEY_VAULT_NAME: useKeyVault ? keyVault.outputs.name : ''
       AZURE_SEARCH_QUERY_LANGUAGE: searchQueryLanguage
@@ -360,8 +358,8 @@ module computerVision 'core/ai/cognitiveservices.bicep' = if (useGPT4V) {
   }
 }
 
-// Currently, we only need Key Vault for storing Computer Vision key,
-// which is only used for GPT-4V.
+// Currently, we only need Key Vault for storing Search service key,
+// which is only used for free tier
 module keyVault 'core/security/keyvault.bicep' = if (useKeyVault) {
   name: 'keyvault'
   scope: keyVaultResourceGroup
@@ -386,9 +384,6 @@ module secrets 'secrets.bicep' = if (useKeyVault) {
   scope: keyVaultResourceGroup
   params: {
     keyVaultName: useKeyVault ? keyVault.outputs.name : ''
-    storeComputerVisionSecret: useGPT4V
-    computerVisionId: useGPT4V ? computerVision.outputs.id : ''
-    computerVisionSecretName: computerVisionSecretName
     storeSearchServiceSecret: useSearchServiceKey
     searchServiceId: useSearchServiceKey ? searchService.outputs.id : ''
     searchServiceSecretName: searchServiceSecretName
@@ -452,9 +447,10 @@ module openAiRoleUser 'core/security/role.bicep' = if (openAiHost == 'azure') {
   }
 }
 
-module documentIntelligenceRoleUser 'core/security/role.bicep' = {
-  scope: documentIntelligenceResourceGroup
-  name: 'documentintelligence-role-user'
+// For both document intelligence and computer vision
+module cognitiveServicesRoleUser 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'cognitiveservices-role-user'
   params: {
     principalId: principalId
     roleDefinitionId: 'a97b65f3-24c7-4388-baec-2e87135dc908'
@@ -578,6 +574,17 @@ module searchReaderRoleBackend 'core/security/role.bicep' = if (useAuthenticatio
   }
 }
 
+// For computer vision access by the backend
+module cognitiveServicesRoleBackend 'core/security/role.bicep' = if (useGPT4V) {
+  scope: resourceGroup
+  name: 'cognitiveservices-role-backend'
+  params: {
+    principalId: backend.outputs.identityPrincipalId
+    roleDefinitionId: 'a97b65f3-24c7-4388-baec-2e87135dc908'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenantId
 output AZURE_AUTH_TENANT_ID string = authTenantId
@@ -601,7 +608,6 @@ output OPENAI_API_KEY string = (openAiHost == 'openai') ? openAiApiKey : ''
 output OPENAI_ORGANIZATION string = (openAiHost == 'openai') ? openAiApiOrganization : ''
 
 output AZURE_VISION_ENDPOINT string = useGPT4V ? computerVision.outputs.endpoint : ''
-output VISION_SECRET_NAME string = useGPT4V ? computerVisionSecretName : ''
 output AZURE_KEY_VAULT_NAME string = useKeyVault ? keyVault.outputs.name : ''
 
 output AZURE_DOCUMENTINTELLIGENCE_SERVICE string = documentIntelligence.outputs.name

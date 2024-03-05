@@ -4,7 +4,7 @@ from typing import Any, Optional, Union
 
 from azure.core.credentials import AzureKeyCredential
 from azure.core.credentials_async import AsyncTokenCredential
-from azure.identity.aio import AzureDeveloperCliCredential
+from azure.identity.aio import AzureDeveloperCliCredential, get_bearer_token_provider
 from azure.keyvault.secrets.aio import SecretClient
 
 from prepdocslib.blobmanager import BlobManager
@@ -16,6 +16,7 @@ from prepdocslib.embeddings import (
 )
 from prepdocslib.fileprocessor import FileProcessor
 from prepdocslib.filestrategy import FileStrategy
+from prepdocslib.htmlparser import LocalHTMLParser
 from prepdocslib.integratedvectorizerstrategy import (
     IntegratedVectorizerStrategy,
 )
@@ -35,19 +36,6 @@ def is_key_empty(key):
     return key is None or len(key.strip()) == 0
 
 
-async def get_vision_key(credential: AsyncTokenCredential) -> Optional[str]:
-    if args.visionkey:
-        return args.visionkey
-
-    if args.keyvaultname and args.visionsecretname:
-        key_vault_client = SecretClient(vault_url=f"https://{args.keyvaultname}.vault.azure.net", credential=credential)
-        visionkey = await key_vault_client.get_secret(args.visionsecretname)
-        return visionkey.value
-    else:
-        print("Error: Please provide --visionkey or --keyvaultname and --visionsecretname when using --searchimages.")
-        exit(1)
-
-
 async def setup_file_strategy(credential: AsyncTokenCredential, args: Any) -> Strategy:
     storage_creds = credential if is_key_empty(args.storagekey) else args.storagekey
     blob_manager = BlobManager(
@@ -61,6 +49,7 @@ async def setup_file_strategy(credential: AsyncTokenCredential, args: Any) -> St
         verbose=args.verbose,
     )
 
+    html_parser: Parser
     pdf_parser: Parser
     doc_int_parser: DocumentAnalysisParser
 
@@ -77,12 +66,17 @@ async def setup_file_strategy(credential: AsyncTokenCredential, args: Any) -> St
             verbose=args.verbose,
         )
     if args.localpdfparser or args.documentintelligenceservice is None:
-        pdf_parser = LocalPdfParser()
+        pdf_parser = LocalPdfParser(verbose=args.verbose)
     else:
         pdf_parser = doc_int_parser
+    if args.localhtmlparser or args.documentintelligenceservice is None:
+        html_parser = LocalHTMLParser(verbose=args.verbose)
+    else:
+        html_parser = doc_int_parser
     sentence_text_splitter = SentenceTextSplitter(has_image_embeddings=args.searchimages)
     file_processors = {
         ".pdf": FileProcessor(pdf_parser, sentence_text_splitter),
+        ".html": FileProcessor(html_parser, sentence_text_splitter),
         ".json": FileProcessor(JsonParser(), SimpleTextSplitter()),
         ".docx": FileProcessor(doc_int_parser, sentence_text_splitter),
         ".pptx": FileProcessor(doc_int_parser, sentence_text_splitter),
@@ -120,9 +114,10 @@ async def setup_file_strategy(credential: AsyncTokenCredential, args: Any) -> St
     image_embeddings: Optional[ImageEmbeddings] = None
 
     if args.searchimages:
-        key = await get_vision_key(credential)
-        image_embeddings = (
-            ImageEmbeddings(credential=key, endpoint=args.visionendpoint, verbose=args.verbose) if key else None
+        image_embeddings = ImageEmbeddings(
+            endpoint=args.visionendpoint,
+            token_provider=get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default"),
+            verbose=args.verbose,
         )
 
     print("Processing files...")
@@ -363,6 +358,11 @@ if __name__ == "__main__":
         "--localpdfparser",
         action="store_true",
         help="Use PyPdf local PDF parser (supports only digital PDFs) instead of Azure Document Intelligence service to extract text, tables and layout from the documents",
+    )
+    parser.add_argument(
+        "--localhtmlparser",
+        action="store_true",
+        help="Use Beautiful soap local HTML parser instead of Azure Document Intelligence service to extract text, tables and layout from the documents",
     )
     parser.add_argument(
         "--documentintelligenceservice",
