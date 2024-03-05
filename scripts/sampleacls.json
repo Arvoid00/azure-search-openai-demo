@@ -1,38 +1,88 @@
 {
     "files": {
-        "Benefit_Options.pdf": {
-            "directory": "benefitinfo"
+        "General/Beleidsplan-PWN-2024.pdf": {
+            "directory": "general"
         },
-        "employee_handbook.pdf": {
-            "directory": "employeeinfo"
+        "ProcesTechnoloog onboarding/Pompstation Andijk - Strategische verkenning drinkwaterproductiemiddelen.pdf": {
+            "directory": "procestechnologen"
         },
-        "Northwind_Health_Plus_Benefits_Details.pdf": {
-            "directory": "benefitinfo"
+        "ProcesTechnoloog onboarding/PWN Productieschema met alle zuiveringsstappen.pdf": {
+            "directory": "procestechnologen"
         },
-        "Northwind_Standard_Benefits_Details.pdf": {
-            "directory": "benefitinfo"
+        "ProcesTechnoloog onboarding/PWN waterleveringsgebieden.jpg": {
+            "directory": "procestechnologen"
         },
-        "PerksPlus.pdf": {
-            "directory": "benefitinfo"
+        "Procestechnoloog Support Buddy/Presentaties/Jink/PWN.0130 Go-no go pilot WPJ uitbreiding.pdf": {
+            "directory": "procestechnologen"
         },
-        "role_library.pdf": {
-            "directory": "employeeinfo"
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/Heemskerk/O&M wtp Heemskerk.pdf": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/Heemskerk/rapportage bedrijfsvoering UF winter definitief.pdf": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/Heemskerk/Amsterdam Integriteit 2004.pdf": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Analysis Techniques/Grip op stoffen_FBeen.pdf": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Martin Spruijt/YWP2022_towards_circular_water_Jeremy_Versteegh MS commentaar.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/presentatie bij evides 2022.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Kennisdelen DW-Productie 2022.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Nano Heemskerk.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Go-no go pilot WPJ uitbreiding (start project).pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Technologie PWN.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Strategisch beraad technologie.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Kennisdeling productie 2022.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/presentatie water alliance singapore 2022.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/PWN.0130 Go-no go pilot WPJ uitbreiding.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Jink/Kennisdelen DW-Productie.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/WPJ-Sudents-Tour 2022-06.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/Presentatie PWN en Jan Lagrand - Engels.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/IHE Andijk.pptx": {
+            "directory": "procestechnologen"
+        },
+        "Procestechnoloog Support Buddy/Presentaties/Voorlichting/Algemeen PWN technologie/PWN 2022 english.pptx": {
+            "directory": "procestechnologen"
         }
     },
     "directories": {
-        "employeeinfo": {
-            "groups": ["GPTKB_HRTest"]
+        "general": {
+            "groups": ["General"]
         },
-        "benefitinfo": {
-            "groups": ["GPTKB_EmployeeTest", "GPTKB_HRTest"]
+        "procestechnologen": {
+            "groups": ["General", "ProcesTechnologen"]
         },
         "/": {
-            "groups": ["GPTKB_AdminTest"]
+            "groups": ["General"]
         }
     },
-    "groups": [
-        "GPTKB_AdminTest",
-        "GPTKB_HRTest",
-        "GPTKB_EmployeeTest"
-    ]
+    "groups": ["General", "ProcesTechnologen"]
 }
