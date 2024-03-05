@@ -280,7 +280,7 @@ const Chat = () => {
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
                             <SparkleFilled fontSize={"120px"} primaryFill={"#006DB1"} aria-hidden="true" aria-label="Chat logo" />
-                            <h1 className={styles.chatEmptyStateTitle}>Chat met jouw data</h1>
+                            <h1 className={styles.chatEmptyStateTitle}>Chat met PWN data</h1>
                             <h2 className={styles.chatEmptyStateSubtitle}>Stel een vraag of probeer een voorbeeld</h2>
                             <ExampleList onExampleClicked={onExampleClicked} useGPT4V={useGPT4V} />
                         </div>

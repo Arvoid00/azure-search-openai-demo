@@ -1,6 +1,7 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
 
 import github from "../../assets/github.svg";
+import pwn_logo from "../../assets/PWN-logo.svg";
 
 import styles from "./Layout.module.css";
 
@@ -14,14 +15,7 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <img
-                            src={"/PWN-logo.svg"}
-                            alt="PWN GenAI MVP logo"
-                            aria-label="PWN GenAI MVP logo"
-                            width="80px"
-                            height="80px"
-                            className={styles.headerLogo}
-                        />
+                        <img src={pwn_logo} alt="PWN GenAI MVP logo" aria-label="PWN GenAI MVP logo" width="80px" height="80px" className={styles.headerLogo} />
                         <h3 className={styles.headerTitle}>GenerativeAI MVP</h3>
                     </Link>
                     <nav>
