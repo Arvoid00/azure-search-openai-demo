@@ -78,10 +78,7 @@
             "groups": ["General"]
         },
         "procestechnologen": {
-            "groups": ["General", "ProcesTechnologen"]
-        },
-        "/": {
-            "groups": ["General"]
+            "groups": ["ProcesTechnologen"]
         }
     },
     "groups": ["General", "ProcesTechnologen"]
