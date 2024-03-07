@@ -37,8 +37,10 @@ urlFragment: azure-search-openai-demo
 1. Once logged in, in your terminal do `cd app` and then `start.sh` (Bash/Mac) or `start.ps1` (Windows powershell). The backend will build the install and build the frontend.
 1. Once the app is running open a _new terminal window_ and do `cd app/frontend`. Then `npm i`.
 1. Upon install complete you can run `npm run dev` to start the hot-reload frontend server. Navigate to `localhost:5173` to start developing.
+1. If you want to deploy your backend/frontend code to Azure, and no changes are made to the `infra` folder, you only have to redeploy the code and not provision the resources. Therefore you can use `azd deploy` to update code changes.
 
-**Troubleshoot**
+### Troubleshoot
+
 If the backend server is not starting, it might be required to first let Azure create the services (called provisioning) and deploy the application to the App Service (deploying).
 
 Try `azd package` first (assuming the provisioning has been done before).
